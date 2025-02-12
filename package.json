@@ -22,6 +22,7 @@
   "description": "Dixie Chatbot Server - This is the backend for the Dixie Chatbot Desktop Application. It is built with Node.js and Express.js and is responsible for handling API requests from the Dixie Chatbot’s frontend.",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "eslint": "^9.20.1",
     "express": "^4.21.2"
   }
 }
