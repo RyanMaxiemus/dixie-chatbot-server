@@ -1,13 +1,14 @@
 require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const cors = require('cors');
+const winston = require('winston');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const config = require('./config');
 const { body, validationResult } = require('express-validator');
-const winston = require('winston');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
 const logger = winston.createLogger({
   level: 'info',
@@ -57,12 +58,15 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => { // Handle kill signal
-  logger.info('SIGTERM signal received: Closing HTTP server');
-  process.exit(0);
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+    process.exit(0);
+  });
 });
