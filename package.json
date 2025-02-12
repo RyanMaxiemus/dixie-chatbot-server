@@ -1,0 +1,25 @@
+{
+  "name": "dixie-chatbot-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [ "dixie",
+                "chatbot",
+                "server",
+                "javascript",
+                "node.js",
+                "express",
+                "backend",
+                "llm",
+                "ai",
+                "artificial intelligence"
+              ],
+  "author": "Ryan Maxie",
+  "license": "MIT",
+  "description": "Dixie Chatbot Server - This is the backend for the Dixie Chatbot Desktop Application. It is built with Node.js and Express.js and is responsible for handling API requests from the Dixie Chatbot’s frontend.",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

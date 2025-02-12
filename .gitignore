@@ -1,0 +1,37 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+package-lock.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build directories
+dist/
+build/
+out/
+
+# ESLint cache
+.eslintcache
+
+# OS generated files
+.DS_Store
+
+# Editor directories
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swx
+*.swo
+*.swn
+*.swm
+*.swl
+*.swk
+*.swg
