@@ -8,9 +8,9 @@ This project is the backend for the Dixie Chatbot Desktop Application built with
 
 ```bash
 /dixie-chatbot-server
-├── app.js            # Express server handling API requests
 ├── .env              # Environment variables (e.g., PORT, API keys)
 ├── .gitignore        # Files and directories to ignore in Git
+├── app.js            # Express server handling API requests
 ├── LICENSE           # MIT License file
 ├── package.json      # npm configuration file
 └── README.md         # This file
@@ -28,8 +28,8 @@ This project is the backend for the Dixie Chatbot Desktop Application built with
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/chatbot-backend.git
-   cd chatbot-backend
+   git clone https://github.com/RyanMaxiemus/dixie-chatbot-server.git
+   cd dixie-chatbot-server
    ```
 
 2. **Install dependencies:**
