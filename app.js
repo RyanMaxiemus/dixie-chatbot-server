@@ -5,11 +5,22 @@ const winston = require('winston');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const config = require('./config');
+const { OpenAI } = require('openai');
 const { body, validationResult } = require('express-validator');
 
+// Create an Express app
 const app = express();
 const PORT = config.port;
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+// Middleware to secure the app by setting various HTTP headers
+app.use(express.json());
+app.use(helmet());
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Logger configuration
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
@@ -20,35 +31,38 @@ const logger = winston.createLogger({
   ],
 });
 
-// Middleware to secure the app by setting various HTTP headers
-app.use(helmet());
-
-// Enable CORS for all routes
-app.use(cors());
-
 // Middleware to limit repeated requests to public APIs and/or endpoints
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100, // Limit each IP to 100 requests per 15 minutes
 });
 app.use(limiter);
 
-// Middleware to parse JSON bodies
-app.use(express.json());
-
-// POST endpoint to handle user messages
+// API endpoint to handle chat messages
 app.post('/message', [
   body('message').isString().notEmpty().withMessage('Message is required'),
-], (req, res) => {
+], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   const userMessage = req.body.message;
-  logger.info(`Received message from user: ${userMessage}`);
 
-  res.json({ message: userMessage });
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: userMessage }],
+      temperature: 0.7, // Adjust creativity (0 = most predictable, 1 = most creative)
+      max_tokens: 200, // Limit response length
+    });
+
+    const botResponse = completion.choices[0].message.content;
+    res.json({ message: botResponse });
+  } catch (error) {
+    logger.error('OpenAI API error:', error);
+    res.status(500).json({ error: 'Failed to get response from OpenAI' });
+  }
 });
 
 // Error handling middleware

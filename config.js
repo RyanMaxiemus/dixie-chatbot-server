@@ -2,7 +2,12 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const requiredEnvVars = ['PORT', 'BING_API_KEY'];
+const requiredEnvVars = [
+                          'PORT',
+                          'OPENAI_API_KEY',
+                          'GOOGLE_GEN_LANG_API_KEY',
+                          'GOOGLE_SEARCH_API_KEY'
+                        ];
 
 requiredEnvVars.forEach((varName) => {
   if (!process.env[varName]) {
@@ -12,5 +17,7 @@ requiredEnvVars.forEach((varName) => {
 
 module.exports = {
   port: process.env.PORT,
-  bingApiKey: process.env.BING_API_KEY,
+  openaiApiKey: process.env.OPENAI_API_KEY,
+  googleGenLangApiKey: process.env.GOOGLE_GEN_LANG_API_KEY,
+  googleSearchApiKey: process.env.GOOGLE_SEARCH_API_KEY
 };
