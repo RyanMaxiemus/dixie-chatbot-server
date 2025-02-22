@@ -8,17 +8,15 @@ const config = require('./config');
 const { OpenAI } = require('openai');
 const { body, validationResult } = require('express-validator');
 
-// Create an Express app
-const app = express();
-const PORT = config.port;
+const app = express(); // Create an Express application
+const PORT = config.port; 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const OPENAI_MODEL = 'gpt-4o'; // Define the OpenAI model to use
 
-// Middleware to secure the app by setting various HTTP headers
-app.use(express.json());
-app.use(helmet());
+app.use(express.json()); // Parse JSON bodies
+app.use(helmet()); // Set various HTTP headers for security
 
-// Enable CORS for all routes
-app.use(cors());
+app.use(cors()); // Enable CORS for all routes
 
 // Logger configuration
 const logger = winston.createLogger({
@@ -33,8 +31,8 @@ const logger = winston.createLogger({
 
 // Middleware to limit repeated requests to public APIs and/or endpoints
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per 15 minutes
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100, // Limit each IP to 3 requests per 1 minutes
 });
 app.use(limiter);
 
@@ -50,8 +48,9 @@ app.post('/message', [
   const userMessage = req.body.message;
 
   try {
+    // Call the OpenAI API to generate a response
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: OPENAI_MODEL,
       messages: [{ role: 'user', content: userMessage }],
       temperature: 0.7, // Adjust creativity (0 = most predictable, 1 = most creative)
       max_tokens: 200, // Limit response length
@@ -61,7 +60,7 @@ app.post('/message', [
     res.json({ message: botResponse });
   } catch (error) {
     logger.error('OpenAI API error:', error);
-    res.status(500).json({ error: 'Failed to get response from OpenAI' });
+    res.status(500).json({ error: 'Failed to get response from OpenAI. See server logs for details.' });
   }
 });
 
