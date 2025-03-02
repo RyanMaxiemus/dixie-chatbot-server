@@ -2,7 +2,7 @@ const { OpenAI } = require('openai');
 const config = require('../config');
 const logger = require('../logger');
 
-const openai = new OpenAI({ apiKey: config.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: config.openaiApiKey });
 const OPENAI_MODEL = 'gpt-4o';
 
 // Function to get a response from OpenAI
